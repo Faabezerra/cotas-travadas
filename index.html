@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Cotas Travadas</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ff4444;
+      font-family: Arial, sans-serif;
+      font-size: 60px;
+      font-weight: bold;
+      overflow: hidden;
+    }
+
+    .firework {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: transparent;
+      border-radius: 50%;
+      box-shadow:
+        0 0 red,
+        0 0 yellow,
+        0 0 orange;
+      animation: explode 1.2s infinite;
+    }
+
+    @keyframes explode {
+      from { transform: scale(0); opacity: 1; }
+      to { transform: scale(25); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  COTAS TRAVADAS
+  <div class="firework"></div>
+</body>
+</html>
 
