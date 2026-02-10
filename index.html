@@ -1,45 +1,98 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Cotas Travadas</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #ff4444;
-      font-family: Arial, sans-serif;
-      font-size: 60px;
-      font-weight: bold;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<title>Cotas Travadas</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    overflow: hidden;
+    height: 100%;
+  }
 
-    .firework {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background: transparent;
-      border-radius: 50%;
-      box-shadow:
-        0 0 red,
-        0 0 yellow,
-        0 0 orange;
-      animation: explode 1.2s infinite;
-    }
+  canvas {
+    display: block;
+  }
 
-    @keyframes explode {
-      from { transform: scale(0); opacity: 1; }
-      to { transform: scale(25); opacity: 0; }
-    }
-  </style>
+  .texto {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 64px;
+    font-weight: bold;
+    color: red;
+    transform: translateY(-50%);
+    z-index: 10;
+  }
+</style>
 </head>
 <body>
-  COTAS TRAVADAS
-  <div class="firework"></div>
+
+<div class="texto">COTAS TRAVADAS</div>
+<canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+window.onresize = () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+};
+
+let fireworks = [];
+
+function random(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function createFirework() {
+  const x = random(100, canvas.width - 100);
+  const y = random(50, canvas.height / 2);
+
+  for (let i = 0; i < 80; i++) {
+    fireworks.push({
+      x,
+      y,
+      angle: random(0, Math.PI * 2),
+      speed: random(2, 6),
+      alpha: 1,
+      color: `hsl(${random(0,360)},100%,50%)`
+    });
+  }
+}
+
+function update() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  fireworks.forEach((p, i) => {
+    p.x += Math.cos(p.angle) * p.speed;
+    p.y += Math.sin(p.angle) * p.speed;
+    p.alpha -= 0.015;
+
+    if (p.alpha <= 0) fireworks.splice(i, 1);
+
+    ctx.globalAlpha = p.alpha;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fill();
+  });
+
+  ctx.globalAlpha = 1;
+  requestAnimationFrame(update);
+}
+
+setInterval(createFirework, 900);
+update();
+</script>
+
 </body>
 </html>
-
